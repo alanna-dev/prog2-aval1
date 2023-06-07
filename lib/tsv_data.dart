@@ -14,6 +14,11 @@ class TsvData extends DelimitedData {
     } else {
       throw Exception('O arquivo $fileName não existe.');
     }
+
+    // Verificar se o formato do arquivo é válido
+    if (!isValidFileFormat()) {
+      throw Exception('Formato de arquivo inválido.');
+    }
   }
 
   @override
@@ -56,9 +61,19 @@ class TsvData extends DelimitedData {
   @override
   set data(String value) {
     if (value.isNotEmpty) {
-      load(_fileContent);
+      _fileContent = value;
+
+      // Verificar se o formato do arquivo é válido
+      if (!isValidFileFormat()) {
+        throw Exception('Formato de arquivo inválido.');
+      }
     } else {
       throw Exception('O valor dos dados está vazio.');
     }
+  }
+
+  bool isValidFileFormat() {
+    // Verificar se a primeira linha contém o delimitador
+    return list.isNotEmpty && list[0].contains(delimiter);
   }
 }

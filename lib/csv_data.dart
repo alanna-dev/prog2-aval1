@@ -9,6 +9,15 @@ class CsvData extends DelimitedData {
     if (File(fileName).existsSync()) {
       _fileContent = File(fileName).readAsStringSync();
       list = _fileContent.split('\n');
+
+      if (list.isNotEmpty) {
+        final firstLine = list[0];
+        if (!firstLine.contains(delimiter)) {
+          throw Exception('Formato inválido do arquivo $fileName. Esperado formato CSV.');
+        }
+      } else {
+        throw Exception('Não há dados carregados.');
+      }
     } else {
       throw Exception('O arquivo $fileName não existe.');
     }
